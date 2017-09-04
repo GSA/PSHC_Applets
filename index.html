@@ -1,0 +1,382 @@
+<link rel="stylesheet" type="text/css" href="customizedStyles.css">
+<link rel="stylesheet" type="text/css" href="main.css">
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-animate.js"></script>
+<script src="https://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-2.5.0.js"></script>
+<script src="calc.js" language="javascript">
+</script>
+<!-- calc app -->
+<!--header-->
+<header>
+	<div class="ag_color-primary-one container-fluid">
+		<div class="display-line row ">
+			<div class="col-md-1">
+			</div>
+			<div class="col-md-5">
+				<a href="javascript:location.reload(true);">
+			   		<img src="calc_logo.png" 
+			   			 class= "calclogo img-responsive pull-left " 
+			   			 alt="CALC: Contract Awarded Labor Category Tool"
+			   			 title="Calc logo">
+			   		</img> 
+			   	</a>
+			</div>  
+		</div>
+		<div class="display-line row" >
+			<div class="col-md-1">
+			</div>
+			<div class=" h2 col-md-6 ">
+				<!--description main-->
+				Search awarded ceiling rates for labor categories
+				
+				<h4 class="body-text text-left">
+					CALC lets you conduct market research on professional service labor categories quickly and easily, helping you make better informed decisions. Results shown are awarded hourly rates from GSA IDIQ service schedules.
+				</h4>
+			</div>  
+			<div class="col-md-1">
+			</div>
+			<div class="col-md-3 body-text">
+			   	<h3>
+			    	CALC offers...
+			    </h3>
+			   	<div class="hr"></div>
+			    <div class="h5">
+				    <div class="text-left body-text">
+				    	<img src="roof.png" width="35" height="20" background-size="30px" alt=""> Ceiling Prices
+				    </div>
+				    <div class="text-left body-text">
+				    	<img src="mule.png" width="35" height="20" background-size="30px" alt=""> Fully burdened costs
+				    </div>
+				    <div class="text-left body-text">
+				    	<img src="briefcase.png" width="35" height="20" background-size="30px" alt=""> Services data
+				    </div>
+				    <div class="text-left body-text"> 
+				    	<img src="globe.png" width="35" height="20" background-size="30px" alt=""> Worldwide rates
+				    </div>
+				</div>
+			</div>  
+		</div>
+		<nav class="container ">
+			<div class="row">
+				<div class="col-md-4">
+				</div>
+				<div class="col-md-2">
+					<h4 class="text-center">
+						<a href="/" class="ag_color-primary-one ">Explore data</a>
+					</h4>
+				</div>
+				<div class="col-md-2">
+					<h4 class="text-left">
+						<a href="about.html" class="ag_color-primary-one">About CALC</a>  
+					</h4>
+				</div>
+				<div class="col-md-4">
+				</div>
+			</div>
+		</nav> 
+	</div>
+</header>
+
+<main id="main">
+	<div id="my-app" class="container-fluid typeahead-demo">
+		<script type="text/ng-template" id="customTemplate.html">
+		  <a>
+		      <span ng-bind-html="match.model.labor_category | uibTypeaheadHighlight:query"></span>
+		      
+		      <span ng-bind-html="match.model.count | uibTypeaheadHighlight:query" ></span>
+		  </a>
+		</script>
+
+		<!--<script type="text/ng-template" id="customPopupTemplate.html">
+		  <div class="custom-popup-wrapper"
+		     ng-style="{top: position().top+'px', left: position().left+'px'}"
+		     style="display: block;"
+		     ng-show="isOpen() && !moveInProgress"
+		     aria-hidden="{{!isOpen()}}">
+		    <p class="message">select location from drop down.</p>
+
+		    <ul class="dropdown-menu" role="listbox">
+		      <li class="uib-typeahead-match" ng-repeat="match in matches track by $index" ng-class="{active: isActive($index) }"
+		        ng-mouseenter="selectActive($index)" ng-click="selectMatch($index)" role="option" id="{{::match.id}}">
+		        <div uib-typeahead-match index="$index" match="match" query="query" template-url="templateUrl"></div>
+		      </li>
+		    </ul>
+		  </div>
+		</script>-->
+
+		<!--search form (later change css)-->
+		<form >
+			<section class=" ">
+				<div class="row">
+					<div class="col-md-1">
+					</div>
+					<div class="col-md-11 ">
+						<div class="h4 body-text search-description search-Critieria">
+							Enter your search terms below , separated by commas. (For example: Engineer, Consultant)
+						</div>
+						<div class="row ">
+							<div class="col-md-5 ">
+								<input 
+									type="text"
+									id="category_search" 
+									title="Type a labor category"
+									placeholder="Type a labor category" 
+									value="" 
+									autocomplete="off"
+									ng-model="labor_category" 
+									uib-typeahead="category.labor_category for category in fetchCategories($viewValue)" 
+									typeahead-loading="loadingCategories" 
+									typeahead-no-results="noResults"
+									typeahead-on-select="fetchCategorySelected($item, $model, $label, $event)"
+									typeahead-wait-ms="500"
+									typeahead-focus-first="false"
+									typeahead-template-url="customTemplate.html"
+									ng-keypress="processCategorySelectionKeyEvents($event)"
+									class="form-control predictiveSearchMainInput body-text">
+								</input>
+					    	</div>
+							
+							<!-- search /clear button -->
+							<div class="col-md-7">
+								<button 
+							        class="btn btn-primary"
+							        ng-click="doClick('search')"
+							        value="search"
+							        type="button"
+							        title="Search">
+							        SEARCH
+							    </button>
+
+			    			    <input
+						            class="btn btn-clear-solution"
+						            type="reset"
+						            ng-click="doClick('clear')"
+						            value="CLEAR SEARCH"
+						            title="Clear">						            
+						        </input>
+			    			</div>
+						</div>	
+
+						<!--radio Buttons-->
+						<div class="container-fluid ">
+							<div class="row">
+								<div class="col-md-12">
+									<span class="h4">
+										<input 
+											class="radio-inline radio-inline-align"
+											id="query_type_match_all" 
+											name="queryType" 
+											value="match_all" 
+											title="Contains words"
+											ng-model="query_type"
+											ng-change="doClick('query_type_change')"
+											type="radio"
+											checked>
+										<label for ="query_type_match_all" class="search-Critieria">Contains words
+										</label>
+									</span>
+									<span class="h4 search-Critieria">	
+										<input 
+											class="radio-inline radio-inline-align"
+											id="query_type_match_exact" 
+											name="queryType" 
+											value="match_exact" 
+											title="Exact match"
+											ng-model="query_type"
+											ng-change="doClick('query_type_change')"
+											type="radio">
+										<label for="query_type_match_exact">
+											Exact match
+										</label>
+									</span>
+								</div>
+							</div>
+						</div>
+
+						<div ng-if ="labor_category" class= "h4 search-description"> 
+							Showing <span ng-if="count < 200"> {{count}} 
+									</span> 
+									<span ng-if="count == 200 || count >200 "> 200
+									</span>
+							of <b> {{count}} </b> results with <b>{{labor_category}}</b></div>
+
+						<div ng-hide ="labor_category" class= "h4 search-description"> Showing 200 of <b> {{count}} </b>results </div>
+
+					</div>
+				</div>
+			</section>
+		</form>
+		
+		<!-- Search table results-->	
+		<div class="container-fluid">	
+			<div class="row search-results">
+				<div class="col-md-1">
+		        </div>
+		        <div class="col-md-10 show-results">
+		        	<div class="table-responsive">
+						<table id ="searchTable" class= "table table-striped table-hover ">
+					    	<thead>
+					    		<tr class="small">				    			
+								    <th tabindex="0" class="col-md-3 labor_category rate-header"
+								    	title="Labor Category : Select to sort Ascending"
+								  		ng-click="sortRates('labor_category')"
+								  		ng-keypress="sortByCategoryKeyEvent($event, 'labor_category')">
+								    	<u>Labor Category</u> 
+								    	<span title="Labor Category : sorted ascending,select to sort ascending"
+								    		  ng-show="sortType == 'labor_category' && sortDescending == false" 
+								        	  class="fa fa-caret-up">
+								        </span>
+								        <span title="Labor Category : sorted descending,select to sort ascending"      ng-show="sortType == 'labor_category' && sortDescending == true" 
+								              class="fa fa-caret-down">
+								        </span>	
+								    </th>
+								    <th tabindex="0"
+								    	class="col-md-1 education_level rate-header"
+								    	title="Minimum Years of Education : Select to sort Ascending"
+								    	ng-click="sortRates('education_level')"
+								    	ng-keypress="sortByCategoryKeyEvent($event, 'education_level')">
+								    	<u>Min Edu. </u>
+								    	<span title="Minimum Years of Education : sorted ascending,select to sort descending" 
+								    			ng-show="sortType == 'education_level' && !sortDescending" 
+								        	  	class="fa fa-caret-up">
+								        </span>
+								        <span title="Minimum Years of Education : sorted descending,select to sort ascending" 
+								        		ng-show="sortType == 'education_level' && sortDescending" 
+								              	class="fa fa-caret-down">
+								        </span>	
+								    </th>
+								    <th tabindex="0"
+								    	class="col-md-2 min_years_experience rate-header"
+								    	title="Minimum Years of Experience : Select to sort Ascending" 
+								    	ng-click="sortRates('min_years_experience')"
+								    	ng-keypress="sortByCategoryKeyEvent($event, 'min_years_experience')">
+								    	<u>Experience</u> 
+								    	<span title="Minimum Years of Experience : sorted ascending,select to sort descending" 
+								    		ng-show="sortType == 'min_years_experience' && !sortDescending" 
+								        	class="fa fa-caret-up">
+								        </span>
+								        <span title="Minimum Years of Experience : sorted descending,select to sort ascending" 
+								        		ng-show="sortType == 'min_years_experience' && sortDescending" 
+								              	class="fa fa-caret-down">
+								        </span>	
+								    </th>
+								    <th tabindex="0"
+								    	class="col-md-1 current_price rate-header"
+								    	title="Ceiling Price : Select to sort Ascending" 
+								    	ng-click="sortRates('current_price')"
+								    	ng-keypress="sortByCategoryKeyEvent($event, 'current_price')">
+								        <u>Price </u>
+								        <span title="Ceiling Price : sorted ascending,select to sort descending" 
+								        		ng-show="sortType == 'current_price' && !sortDescending" 
+								        	  	class="fa fa-caret-up">
+								        </span>
+								        <span title="Ceiling Price : sorted descending,select to sort ascending"
+								        		ng-show="sortType == 'current_price' && sortDescending" 
+								              	class="fa fa-caret-down">
+								        </span>							        
+								    </th>
+								    <th tabindex="0"
+								    	class="col-md-2 idv_piid rate-header"
+								    	title="Contract Number : Select to sort Ascending"
+								    	ng-click="sortRates('idv_piid')"
+								    	ng-keypress="sortByCategoryKeyEvent($event, 'idv_piid')">
+								    	<u>Contract# </u>
+										<span title="Contract Number: sorted ascending,select to sort descending"
+								        		ng-show="sortType == 'idv_piid' && !sortDescending" 
+								        		class="fa fa-caret-up">
+								        </span>
+								        <span title="Contract Number: sorted descending,select to sort ascending" 
+								        		ng-show="sortType == 'idv_piid' && sortDescending" 
+								              	class="fa fa-caret-down">
+								        </span>	
+								    </th>
+								    <th tabindex="0"
+								    	class="col-md-2 vendor_name rate-header"
+								    	title="Vendor : Select to sort Ascending"
+								    	ng-click="sortRates('vendor_name')"
+								    	ng-keypress="sortByCategoryKeyEvent($event, 'vendor_name')">
+								    	<u>Vendor </u>
+								    	<span title="Vendor : sorted ascending,select to sort descending"
+								        		ng-show="sortType == 'vendor_name' && !sortDescending" 
+								        		class="fa fa-caret-up">
+								        </span>
+								        <span title="Vendor : sorted descending,select to sort ascending" 
+								        		ng-show="sortType == 'vendor_name' && sortDescending" 
+								              	class="fa fa-caret-down">
+								        </span>	
+								    </th>
+								    <th tabindex="0"
+								    	class="col-md-1 schedule rate-header"
+								    	title="Schedule : Select to sort Ascending"
+								    	ng-click="sortRates('schedule')"
+								    	ng-keypress="sortByCategoryKeyEvent($event, 'schedule')">
+								    	<u>Schedule </u> 
+								    	<span title="Schedule : sorted ascending,select to sort descending"
+								        		ng-show="sortType == 'schedule' && !sortDescending" 
+								        		class="fa fa-caret-up">
+								        </span>
+								        <span title="Schedule : sorted descending,select to sort ascending" 
+								        		ng-show="sortType == 'schedule' && sortDescending" 
+								              	class="fa fa-caret-down">
+								        </span>	
+
+								    </th>
+								</tr>
+						    </thead>
+					        <tbody>
+						       <tr class="small" 
+						       		ng-mouseover="hoverIn()" 
+						       		ng-mouseleave="hoverOut()" 
+						       		ng-repeat="rate in rates.results | limitTo: 200 |filter: {isExcluded:false}">
+						       		
+						        	<td class="labor_category" style="word-wrap: break-word;min-width: 80px;max-width: 80px;white-space:normal">  
+						        	<span class="fa fa-remove"> </span> 
+						        	 {{ rate.labor_category }} 
+							        </td>
+							        
+							        <td class="education_level">
+							          {{ rate.education_level == null ? "N/A": rate.education_level}}
+							        </td>
+							        <td class="min_years_experience">
+							          {{ rate.min_years_experience }}
+							          <span ng-show="years" class="animate-show">
+						             {{ rate.min_years_experience == 1 ? "year": "years"}}
+						                
+						            </span>
+							        </td>
+							        <td class="current_price">
+							         ${{ rate.current_price | number : 2}}
+							        </td>
+							        <td class="idv_piid">
+							        <a href="https://www.gsaadvantage.gov/ref_text/{{rate.idv_piid_link}}/{{rate.idv_piid_link}}_online.htm" target="_blank"><u> {{ rate.idv_piid }}</a>
+							        </td>
+							        <td class="vendor_name">
+							          {{ rate.vendor_name }}
+							        </td>
+							        <td class="schedule">
+							          {{ rate.schedule }}
+							        </td>
+						        </tr>
+						    </tbody>
+						</table>
+						<a href="#searchTable"><u>Return to the top</u></a>
+					</div> 
+				</div>   <!--div col-md-8-->
+				<div class="col-md-1">
+		    	</div>
+		    </div><!--div row-->
+		</div>			
+	</div><!--div ng-app-->
+</main>
+
+<footer>
+	<div class="AG-Footer">
+		<div class= "topic-footer text-center">
+			<p class="dd ">Get in touch. We're always looking for feedback on CALC! 
+				<br>To share your thoughts, email us at 
+		    	<a href="mailto:calc@gsa.gov">calc@gsa.gov</a>.
+		    </p>		
+		</div>    
+	</div>
+</footer>
